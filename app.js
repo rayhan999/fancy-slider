@@ -15,6 +15,7 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
+  console.log(images);
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -22,10 +23,38 @@ const showImages = (images) => {
   images.forEach(image => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+    div.innerHTML = ` <img class="img-fluid img-thumbnail image-preview" onmouseover="preview('${image.user}')" onmouseout="previewOut('${image.user}')" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">
+    <h4 class="preview text-center">${image.user}</h4>
+    `;
     gallery.appendChild(div)
   })
 
+}
+const preview = nameUser => {
+  let userName = document.getElementsByClassName('preview');
+  for (let i = 0; i < userName.length; i++) {
+    let user = userName[i];
+    console.log(user.innerHTML);
+    if (user.innerHTML == nameUser) {
+      user.style.display = 'block';
+    } else {
+      console.log('no');
+    }
+
+  }
+}
+const previewOut = nameUser => {
+  let userName = document.getElementsByClassName('preview');
+  for (let i = 0; i < userName.length; i++) {
+    let user = userName[i];
+    console.log(user.innerHTML);
+    if (user.innerHTML == nameUser) {
+      user.style.display = 'none';
+    } else {
+      console.log('no');
+    }
+
+  }
 }
 
 const getImages = (query) => {
@@ -68,19 +97,24 @@ const createSlider = () => {
   // hide image aria
   imagesArea.style.display = 'none';
   const duration = document.getElementById('duration').value || 1000;
-  sliders.forEach(slide => {
-    let item = document.createElement('div')
-    item.className = "slider-item";
-    item.innerHTML = `<img class="w-100"
+  console.log(duration);
+  if (duration > 0) {
+    sliders.forEach(slide => {
+      let item = document.createElement('div')
+      item.className = "slider-item";
+      item.innerHTML = `<img class="w-100"
     src="${slide}"
     alt="">`;
-    sliderContainer.appendChild(item)
-  })
-  changeSlide(0)
-  timer = setInterval(function () {
-    slideIndex++;
-    changeSlide(slideIndex);
-  }, duration);
+      sliderContainer.appendChild(item)
+    })
+    changeSlide(0)
+    timer = setInterval(function () {
+      slideIndex++;
+      changeSlide(slideIndex);
+    }, duration);
+  } else {
+    alert("Duration can't be Negative.");
+  }
 }
 
 // change slider index 
