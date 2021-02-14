@@ -16,6 +16,14 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
+
+  // ------------------------Extra Feature(Error message is search result empty)------------------------
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.innerHTML = "";
+  if (images.length == 0) {
+    toggleSpinner(false);
+    errorMessage.innerText = 'No results found';
+  }
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -57,7 +65,7 @@ const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
+    .catch((err) => console.log(err));
 }
 
 let slideIndex = 0;
@@ -71,6 +79,8 @@ const selectItem = (event, img) => {
   } else {
     sliders.splice(item, 1);
   }
+
+  // ---------------------Extra feature(Number of selected Image showing)--------------------
   if (sliders.length > 0) {
     document.getElementById('slider-number').innerText = '(' + sliders.length + ')';
   } else {
@@ -99,7 +109,7 @@ const createSlider = () => {
   // hide image aria
   imagesArea.style.display = 'none';
   sliders.forEach(slide => {
-    let item = document.createElement('div')
+    let item = document.createElement('div');
     item.className = "slider-item";
     item.innerHTML = `<img class="w-100"
     src="${slide}"
@@ -167,13 +177,14 @@ document.getElementById('search').addEventListener('keypress', function (event) 
   }
 })
 
-// -------------------Extra Feature(Enter keyperss eventlistener for slider duration)---------------------------
+// -------------------Extra Feature(Enter keyperss eventlistener for slider duration)----------------------
 document.getElementById('duration').addEventListener('keypress', function (event) {
   if (event.key === 'Enter') {
     sliderBtn.click();
   }
 })
 
+// --------------------Extra Feature(Loading spinner Toogller)------------------------------
 const toggleSpinner = (show) => {
   const spinner = document.getElementById('spinner');
   if (show) {
