@@ -56,7 +56,7 @@ img {
 }
 
 .preview {
-  display: none;
+  opacity: 0;
 }
 
 @media (max-width: 767px) {

@@ -4,6 +4,7 @@ const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
+
 // selected image 
 let sliders = [];
 
@@ -15,7 +16,6 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
-  console.log(images);
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -23,39 +23,33 @@ const showImages = (images) => {
   images.forEach(image => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail image-preview" onmouseover="preview('${image.user}')" onmouseout="previewOut('${image.user}')" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">
-    <h4 class="preview text-center">${image.user}</h4>
+    div.innerHTML = `
+    <img class="img-fluid img-thumbnail image-preview" onmouseover="preview('${image.id}','over')" onmouseout="preview('${image.id}','out')" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">
+    <div class="preview">
+    <h4 class="previewId text-center d-none">${image.id}</h4>
+    <h4 class="text-center">${image.user}</h4>
+    </div>
     `;
     gallery.appendChild(div)
   })
 
 }
-const preview = nameUser => {
-  let userName = document.getElementsByClassName('preview');
-  for (let i = 0; i < userName.length; i++) {
-    let user = userName[i];
-    console.log(user.innerHTML);
-    if (user.innerHTML == nameUser) {
-      user.style.display = 'block';
-    } else {
-      console.log('no');
-    }
 
+// -------------Extra Feature(Showing Username on Mouse hover)------------------------------
+const preview = (value, position) => {
+  let userId = document.getElementsByClassName('previewId');
+  for (let i = 0; i < userId.length; i++) {
+    let id = userId[i];
+    if (id.innerHTML == value) {
+      if (position === 'over') {
+        id.parentNode.style.opacity = 1;
+      } else if (position === 'out') {
+        id.parentNode.style.opacity = 0;
+      }
+    }
   }
 }
-const previewOut = nameUser => {
-  let userName = document.getElementsByClassName('preview');
-  for (let i = 0; i < userName.length; i++) {
-    let user = userName[i];
-    console.log(user.innerHTML);
-    if (user.innerHTML == nameUser) {
-      user.style.display = 'none';
-    } else {
-      console.log('no');
-    }
 
-  }
-}
 
 const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
@@ -94,27 +88,23 @@ const createSlider = () => {
 
   sliderContainer.appendChild(prevNext)
   document.querySelector('.main').style.display = 'block';
+  const duration = parseInt(document.getElementById('duration').value) || 1000;
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
-  console.log(duration);
-  if (duration > 0) {
-    sliders.forEach(slide => {
-      let item = document.createElement('div')
-      item.className = "slider-item";
-      item.innerHTML = `<img class="w-100"
+  sliders.forEach(slide => {
+    let item = document.createElement('div')
+    item.className = "slider-item";
+    item.innerHTML = `<img class="w-100"
     src="${slide}"
     alt="">`;
-      sliderContainer.appendChild(item)
-    })
-    changeSlide(0)
-    timer = setInterval(function () {
-      slideIndex++;
-      changeSlide(slideIndex);
-    }, duration);
-  } else {
-    alert("Duration can't be Negative.");
-  }
+    sliderContainer.appendChild(item)
+  })
+  changeSlide(0)
+  timer = setInterval(function () {
+    slideIndex++;
+    changeSlide(slideIndex);
+  }, duration);
+  console.log(duration);
 }
 
 // change slider index 
@@ -152,5 +142,15 @@ searchBtn.addEventListener('click', function () {
 })
 
 sliderBtn.addEventListener('click', function () {
-  createSlider()
+  var duration = document.getElementById('duration').value || 1000;
+  if (duration > 0) {
+    createSlider()
+  }
+  else if (duration <= 0) {
+    document.getElementById('duration').value = '';
+    alert("Duration can't be Negative.");
+  } else {
+    document.getElementById('duration').value = '';
+    alert("Duration must be a number.");
+  }
 })
