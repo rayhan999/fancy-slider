@@ -160,3 +160,9 @@ document.getElementById('search').addEventListener('keypress', function (event) 
     searchBtn.click();
   }
 })
+
+document.getElementById('duration').addEventListener('keypress', function (event) {
+  if (event.key === 'Enter') {
+    sliderBtn.click();
+  }
+})
