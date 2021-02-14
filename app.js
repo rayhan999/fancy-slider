@@ -71,6 +71,11 @@ const selectItem = (event, img) => {
   } else {
     sliders.splice(item, 1);
   }
+  if (sliders.length > 0) {
+    document.getElementById('slider-number').innerText = '(' + sliders.length + ')';
+  } else {
+    document.getElementById('slider-number').innerText = '';
+  }
 }
 var timer
 const createSlider = () => {
@@ -106,7 +111,6 @@ const createSlider = () => {
     slideIndex++;
     changeSlide(slideIndex);
   }, duration);
-  console.log(duration);
 }
 
 // change slider index 
