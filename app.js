@@ -30,7 +30,8 @@ const showImages = (images) => {
     <h4 class="text-center">${image.user}</h4>
     </div>
     `;
-    gallery.appendChild(div)
+    gallery.appendChild(div);
+    toggleSpinner(false);
   })
 
 }
@@ -52,6 +53,7 @@ const preview = (value, position) => {
 
 
 const getImages = (query) => {
+  toggleSpinner(true);
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
@@ -161,8 +163,18 @@ document.getElementById('search').addEventListener('keypress', function (event) 
   }
 })
 
+// -------------------Extra Feature(Enter keyperss eventlistener for slider duration)---------------------------
 document.getElementById('duration').addEventListener('keypress', function (event) {
   if (event.key === 'Enter') {
     sliderBtn.click();
   }
 })
+
+const toggleSpinner = (show) => {
+  const spinner = document.getElementById('spinner');
+  if (show) {
+    spinner.classList.remove('d-none');
+  } else {
+    spinner.classList.add('d-none');
+  }
+}
