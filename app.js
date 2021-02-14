@@ -154,3 +154,9 @@ sliderBtn.addEventListener('click', function () {
     alert("Duration must be a number.");
   }
 })
+
+document.getElementById('search').addEventListener('keypress', function (event) {
+  if (event.key === 'Enter') {
+    searchBtn.click();
+  }
+})
